@@ -130,8 +130,8 @@ function get_table_markup($data = null) {
             $markup .= '<li><strong>' . $item->year . ' ' . $item->make . ' ' . $item->model
                     . ' </strong> in the ' . $item->category
                     . ' category <br>';
-            $markup .= 'Engine: ' . $item->cylinders . ' cylinder '.get_fuel_type_label($item->fuel_type);
-            $markup .= ' engine with '. get_gears($item->transmission). ' ' . get_transmission_type_label($item->transmission) . ' transmission.';
+            $markup .= 'Engine: ' . $item->cylinders . ' cylinder <strong>'.get_fuel_type_label($item->fuel_type);
+            $markup .= '</strong> engine with '. get_gears($item->transmission). ' <strong>' . get_transmission_type_label($item->transmission) . '</strong> transmission.';
             $markup .= '<br>';
             $markup .= 'Fuel Economy: <strong>' . $item->liters_city
                     . ' liters/100km</strong> in the city and <strong>' . $item->liters_hwy
