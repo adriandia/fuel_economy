@@ -1,0 +1,137 @@
+<?php
+
+/*
+ * Implements hook_menu()
+ */
+
+function fuel_economy_menu() {
+  $items = array();
+
+  $items['fuel_economy'] = array(
+    'type' => MENU_CALLBACK,
+    'title' => 'Fuel Economy', //titles will be translated automatically
+    'page callback' => 'get_data',
+    'page arguments' => array(1),
+    'access callback' => 'user_access', // user_access is defined by drupal core.  this is called by default but the paramaters below are necessary
+    'access arguments' => array('access content')  // this argument is passed the the user_access function
+  );
+
+  return $items;
+}
+
+function get_years() {
+    $items = array();
+    $result = db_query('SELECT DISTINCT f.year FROM {fuel_economy} f ORDER BY f.year');
+    foreach ($result as $record) {
+        $items[$record->year] = $record->year;
+    }
+    return $items;
+}
+
+function get_makes() {
+    $items = array('All');
+    $result = db_query('SELECT DISTINCT f.make FROM {fuel_economy} f ORDER BY f.make');
+    foreach ($result as $record) {
+        $items[$record->make] = $record->make;
+    }
+    return $items;
+}
+
+function get_make_models() {
+    $items = array('All');
+    $result = db_query('SELECT DISTINCT make, model FROM {fuel_economy} ORDER BY make, model');
+    foreach ($result as $record) {
+        $items[$record->make][] = $record->model;
+    }
+    return $items;
+}
+
+function get_categories() {
+    $items = array('All');
+    $result = db_query('SELECT DISTINCT category FROM {fuel_economy} ORDER BY category');
+    foreach ($result as $record) {
+        $items[$record->category] = $record->category;
+    }
+    return $items;
+}
+
+function get_cars($year = null, $make = null, $category = null) {
+    $query = db_select('fuel_economy', 'f')
+    ->fields('f')
+    ->range(0, 10);
+    
+    if ($year)
+    
+    $result = $query->execute();
+    
+    $items = array();
+    //$result = db_query('SELECT * FROM {fuel_economy} LIMIT 10');
+    foreach ($result as $record) {
+        $items[] = $record;
+    }
+    return $items;
+}
+
+
+function form_fuel_economy($form, &$form_state) {
+    
+    $form = array();
+    
+    $form['year'] = array(
+        '#type' => 'select',
+        '#title' => 'Year',
+        '#options' => get_years(),
+        '#default_value' =>  '2014',
+        '#required' => TRUE,
+    );
+    
+     $form['category'] = array(
+        '#type' => 'select',
+        '#title' => 'Category',
+        '#options' => get_categories(),
+    );
+    
+    $form['make'] = array(
+        '#type' => 'select',
+        '#title' => 'Make',
+        '#options' => get_makes(),
+    );
+    
+    $form['buttons']['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Submit',
+    );
+    
+    return $form;
+}
+
+function form_fuel_economy_submit(&$form, &$form_state) {
+    dsm($form_state['values']);
+    
+    $cars = get_cars();
+    dsm($cars);
+}
+
+function get_data($arg1) {   
+
+//SELECT * FROM code1.fuel_economy where year = 2014 order by liters_city
+  
+  
+  $content = array();
+  $content['raw_markup'] = array(
+    '#type' => 'markup',
+    '#markup' => 'Truly, this is magical!' . $arg1,
+    '#prefix' => '<p>',
+    '#sufix' => '</p>',
+      '#attached' => array(
+      'css' => array(
+        drupal_get_path('module', 'fuel_economy') . '/fuel-economy.css'
+      )
+    ),
+  );
+  
+  $content['form'] = drupal_get_form('form_fuel_economy');
+  
+  return $content;
+}
+
