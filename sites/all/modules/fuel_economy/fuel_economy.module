@@ -1,22 +1,23 @@
 <?php
+
 $data = null;
 /*
  * Implements hook_menu()
  */
 
 function fuel_economy_menu() {
-  $items = array();
+    $items = array();
 
-  $items['fuel_economy'] = array(
-    'type' => MENU_CALLBACK,
-    'title' => 'Fuel Economy', //titles will be translated automatically
-    'page callback' => 'get_data',
-    'page arguments' => array(1),
-    'access callback' => 'user_access', // user_access is defined by drupal core.  this is called by default but the paramaters below are necessary
-    'access arguments' => array('access content')  // this argument is passed the the user_access function
-  );
+    $items['fuel_economy'] = array(
+        'type' => MENU_CALLBACK,
+        'title' => 'Fuel Economy', //titles will be translated automatically
+        'page callback' => 'get_data',
+        'page arguments' => array(1),
+        'access callback' => 'user_access', // user_access is defined by drupal core.  this is called by default but the paramaters below are necessary
+        'access arguments' => array('access content')  // this argument is passed the the user_access function
+    );
 
-  return $items;
+    return $items;
 }
 
 function get_years() {
@@ -57,16 +58,19 @@ function get_categories() {
 
 function get_cars($year = null, $make = null, $category = null) {
     $query = db_select('fuel_economy', 'f')
-    ->fields('f')
-    ->orderBy('liters_year')
-    ->range(0, 20);
-    
-    if ($year) $query->condition('year', $year,'=');
-    if ($make) $query->condition('make', $make,'=');
-    if ($category) $query->condition('category', $category,'=');
-    
+            ->fields('f')
+            ->orderBy('liters_year')
+            ->range(0, 20);
+
+    if ($year)
+        $query->condition('year', $year, '=');
+    if ($make)
+        $query->condition('make', $make, '=');
+    if ($category)
+        $query->condition('category', $category, '=');
+
     $result = $query->execute();
-    
+
     $items = array();
 
     foreach ($result as $record) {
@@ -76,82 +80,64 @@ function get_cars($year = null, $make = null, $category = null) {
 }
 
 function form_fuel_economy($form, &$form_state) {
-    
+
     $form = array();
-    
+
     $form['year'] = array(
         '#type' => 'select',
         '#title' => 'Year',
         '#options' => get_years(),
-        '#default_value' =>  '2014',
+        '#default_value' => '2014',
         '#required' => TRUE,
     );
-    
-     $form['category'] = array(
+
+    $form['category'] = array(
         '#type' => 'select',
         '#title' => 'Category',
         '#options' => get_categories(),
     );
-    
+
     $form['make'] = array(
         '#type' => 'select',
         '#title' => 'Make',
         '#options' => get_makes(),
     );
-    
+
     $form['buttons']['submit'] = array(
         '#type' => 'submit',
         '#value' => 'Submit',
     );
-    
+
     return $form;
 }
 
 function form_fuel_economy_submit(&$form, &$form_state) {
     global $data;
-    $values = isset($form_state['values']) ? $form_state['values'] : NULL;   
+    $values = isset($form_state['values']) ? $form_state['values'] : NULL;
     $cars = ($values) ? get_cars($values['year'], $values['make'], $values['category']) : get_cars();
-    
+
     $data = $cars;
-    
+
     $form_state['storage'] = $cars;
     $form_state['rebuild'] = TRUE;
-    
 }
 
 function get_table_markup($data = null) {
     //dsm($data);
     if (count($data) > 0) {
-        $markup = '<table>
-        <tr>
-          <th>#</th>
-          <th>Year</th> 
-          <th>Make</th>
-          <th>Model</th>
-          <th>Category</th>     
-          <th>Fuel Type</th>
-          <th>L/100 city</th>
-          <th>L/100 hwy</th>
-          <th>liters/year</th>
-          <th>C02 / year</th>
-        </tr>';
-        $i=1;
+        $markup = '<div><ol>';
         foreach ($data as $k => $item) {
-
-            $markup .= '<tr>';
-              $markup .= '<td>'. $i++ .'</td>';
-              $markup .= '<td>'. $item->year .'</td> ';
-              $markup .= '<td>'. $item->make .'</td>';
-              $markup .= '<td>'. $item->model .'</td>';
-              $markup .= '<td>'. $item->category .'</td>';
-              $markup .= '<td>'. $item->fuel_type .'</td>';
-              $markup .= '<td>'. $item->liters_city .'</td>';
-              $markup .= '<td>'. $item->liters_hwy .'</td>';
-              $markup .= '<td>'. $item->liters_year .'</td>';
-              $markup .= '<td>'. $item->co2_year .'</td>';
-            $markup .= '</tr>';
+            $markup .= '<li><strong>' . $item->year . ' ' . $item->make . ' ' . $item->model
+                    . ' </strong> in the ' . $item->category
+                    . ' category <br>Fuel Economy: <strong>' . $item->liters_city
+                    . ' liters/100km</strong> in the city and <strong>' . $item->liters_hwy
+                    . ' liters/100km</strong> on the hwy. <br> This averages out to <strong>' . $item->liters_year
+                    . ' liters/year</strong> and <strong>' . $item->co2_year
+                    . ' kg</strong> of co2 emissions/year.'              
+                    . '</li>';
+            
         }
-        $markup .= '</table>';
+        $markup .= '</ol></div>';
     } elseif (is_null($data)) {
         $markup = '<p>Please make selections above and submit the form</p>';
     } else {
@@ -160,25 +146,24 @@ function get_table_markup($data = null) {
     return $markup;
 }
 
-function get_data($arg1) {   
-  $content = array();
-  $content['form'] = drupal_get_form('form_fuel_economy');
-  
-  global $data;
+function get_data($arg1) {
+    $content = array();
+    $content['form'] = drupal_get_form('form_fuel_economy');
 
-  
-  $content['raw_markup'] = array(
-    '#type' => 'markup',
-    '#markup' => get_table_markup($data),
-    '#prefix' => '<p>',
-    '#sufix' => '</p>',
-      '#attached' => array(
-      'css' => array(
-        drupal_get_path('module', 'fuel_economy') . '/fuel-economy.css'
-      )
-    ),
-  );
-  
-  return $content;
+    global $data;
+
+
+    $content['raw_markup'] = array(
+        '#type' => 'markup',
+        '#markup' => get_table_markup($data),
+        '#prefix' => '<p>',
+        '#sufix' => '</p>',
+        '#attached' => array(
+            'css' => array(
+                drupal_get_path('module', 'fuel_economy') . '/fuel-economy.css'
+            )
+        ),
+    );
+
+    return $content;
 }
-

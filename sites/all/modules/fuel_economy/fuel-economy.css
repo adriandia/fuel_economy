@@ -9,3 +9,10 @@ div.menu-magic-image img {
 #form-fuel-economy #edit-submit {
     margin: 30px 0 0 10px;
 }
+
+#block-system-main > div > div > ol > li {
+    margin-left: 20px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid green;
+    
+}
