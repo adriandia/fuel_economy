@@ -123,15 +123,19 @@ function form_fuel_economy_submit(&$form, &$form_state) {
 }
 
 function get_table_markup($data = null) {
-    //dsm($data);
+    dsm($data);
     if (count($data) > 0) {
         $markup = '<div><ol>';
         foreach ($data as $k => $item) {
             $markup .= '<li><strong>' . $item->year . ' ' . $item->make . ' ' . $item->model
                     . ' </strong> in the ' . $item->category
-                    . ' category <br>Fuel Economy: <strong>' . $item->liters_city
+                    . ' category <br>';
+            $markup .= 'Engine: ' . $item->cylinders . ' cylinder '.get_fuel_type_label($item->fuel_type);
+            $markup .= ' engine with '. get_gears($item->transmission). ' ' . get_transmission_type_label($item->transmission) . ' transmission.';
+            $markup .= '<br>';
+            $markup .= 'Fuel Economy: <strong>' . $item->liters_city
                     . ' liters/100km</strong> in the city and <strong>' . $item->liters_hwy
-                    . ' liters/100km</strong> on the hwy. <br> This averages out to <strong>' . $item->liters_year
+                    . ' liters/100km</strong> on the hwy. <br> Yearly average: <strong>' . $item->liters_year
                     . ' liters/year</strong> and <strong>' . $item->co2_year
                     . ' kg</strong> of co2 emissions/year.'              
                     . '</li>';
@@ -166,4 +170,49 @@ function get_data($arg1) {
     );
 
     return $content;
+}
+
+function get_fuel_type_label($type) {
+    switch (strtoupper($type)) {
+        case 'D':
+            return 'disel';
+            break;
+        case 'E':
+            return 'ethanol (E85)';
+            break;
+        case 'N':
+            return 'natural Gas';
+            break;
+        case 'X':
+            return 'regular gasoline';
+            break;
+        case 'Z':
+            return 'premium gasoline';
+            break;
+
+        default:
+            return 'unknown';
+            break;
+    }
+}
+
+function get_transmission_type_label($type) {
+    $labels = array(      
+        'AM' => 'automated manual',
+        'AS' => 'automatic with select shift',
+        'AV' => 'continuously variable',
+        'A' => 'automatic',
+        'M' => 'manual'
+    );
+    $type = strtoupper(str_replace(range(0,9),'',$type));
+    if (array_key_exists($type, $labels)) {
+        return $labels[$type];
+    }
+}
+
+function get_gears($type) {
+    $gears = filter_var($type, FILTER_SANITIZE_NUMBER_INT);
+    if ($gears > 0) {
+        return $gears . ' gear';
+    }
 }
