@@ -151,41 +151,7 @@ function get_table_markup($data = null) {
               $markup .= '<td>'. $item->co2_year .'</td>';
             $markup .= '</tr>';
         }
-
         $markup .= '</table>';
-
-        $markup .= 'Understanding the Table';
-        $markup .= 'Model';
-        $markup .= '<ul>';
-            $markup .= '<li>4WD/4X4 = Four-wheel drive</li>';
-            $markup .= '<li>AWD = All-wheel drive</li>';
-            $markup .= '<li>CNG = Compressed natural gas</li>';
-            $markup .= '<li>FFV = Flexible-fuel vehicle</li>';
-            $markup .= '<li>NGV = Natural gas vehicle</li>';
-            $markup .= '<li># = High output engine that provides more power than the standard engine of the same size</li>';
-        $markup .= '</ul>';
-        $markup .= 'Transmission';
-            $markup .= '<ul>';
-            $markup .= '<li>A = Automatic</li>';
-            $markup .= '<li>AM = Automated manual</li>';
-            $markup .= '<li>AS = Automatic with select shift</li>';
-            $markup .= '<li>AV = Continuously variable</li>';
-            $markup .= '<li>M = Manual</li>';
-            $markup .= '<li>Number of gears (3 – 8)</li>';
-        $markup .= '</ul>';
-        $markup .= 'Fuel Type';
-            $markup .= '<ul>';
-            $markup .= '<li>D = Diesel</li>';
-            $markup .= '<li>E = Ethanol (E85)</li>';
-            $markup .= '<li>N = Natural Gas</li>';
-            $markup .= '<li>X = Regular gasoline</li>';
-            $markup .= '<li>Z = Premium gasoline</li>';
-        $markup .= '</ul>';
-        $markup .= 'Fuel Consumption: Fuel consumption ratings are shown in litres per 100 kilometres (L/100 km) and in miles per imperial gallon (mi./gal.)';
-        $markup .= 'Fuel (L) / Year: Estimated annual fuel use is based on 20 000 km driven and a combined rating of 55 percent city and 45 percent highway.';
-        $markup .= 'CO2 Emissions (kg) / Year: Annual carbon dioxide emissions are based on estimated annual fuel use and fuel type.';
-        $markup .= '';
-    
     } elseif (is_null($data)) {
         $markup = '<p>Please make selections above and submit the form</p>';
     } else {
