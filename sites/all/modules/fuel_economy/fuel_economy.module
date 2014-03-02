@@ -127,15 +127,15 @@ function get_table_markup($data = null) {
     if (count($data) > 0) {
         $markup = '<div><ol>';
         foreach ($data as $k => $item) {
-            $markup .= '<li><strong>' . $item->year . ' ' . $item->make . ' ' . $item->model
+            $markup .= '<li><span style="color:red;"><strong>' . $item->year . ' ' . $item->make . ' ' . $item->model
                     . ' </strong> in the ' . $item->category
-                    . ' category <br>';
-            $markup .= 'Engine: ' . $item->cylinders . ' cylinder <strong>'.get_fuel_type_label($item->fuel_type);
+                    . ' category </span><br>';
+            $markup .= '<span style="color:green">Engine:</span> ' . $item->cylinders . ' cylinder <strong>'.get_fuel_type_label($item->fuel_type);
             $markup .= '</strong> engine with '. get_gears($item->transmission). ' <strong>' . get_transmission_type_label($item->transmission) . '</strong> transmission.';
             $markup .= '<br>';
-            $markup .= 'Fuel Economy: <strong>' . $item->liters_city
+            $markup .= '<span style="color:green;">Fuel Economy:</span> <strong>' . $item->liters_city
                     . ' liters/100km</strong> in the city and <strong>' . $item->liters_hwy
-                    . ' liters/100km</strong> on the hwy. <br> Yearly average: <strong>' . $item->liters_year
+                    . ' liters/100km</strong> on the hwy. <br> <span style="color:green;">Yearly average:</span> <strong>' . $item->liters_year
                     . ' liters/year</strong> and <strong>' . $item->co2_year
                     . ' kg</strong> of co2 emissions/year.'              
                     . '</li>';
