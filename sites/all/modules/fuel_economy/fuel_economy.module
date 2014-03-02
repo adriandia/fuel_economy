@@ -1,5 +1,5 @@
 <?php
-
+$data = null;
 /*
  * Implements hook_menu()
  */
@@ -20,7 +20,7 @@ function fuel_economy_menu() {
 }
 
 function get_years() {
-    $items = array();
+    $items = array('All');
     $result = db_query('SELECT DISTINCT f.year FROM {fuel_economy} f ORDER BY f.year');
     foreach ($result as $record) {
         $items[$record->year] = $record->year;
@@ -58,7 +58,8 @@ function get_categories() {
 function get_cars($year = null, $make = null, $category = null) {
     $query = db_select('fuel_economy', 'f')
     ->fields('f')
-    ->range(0, 10);
+    ->orderBy('liters_year')
+    ->range(0, 20);
     
     if ($year) $query->condition('year', $year,'=');
     if ($make) $query->condition('make', $make,'=');
@@ -73,7 +74,6 @@ function get_cars($year = null, $make = null, $category = null) {
     }
     return $items;
 }
-
 
 function form_fuel_economy($form, &$form_state) {
     
@@ -108,22 +108,102 @@ function form_fuel_economy($form, &$form_state) {
 }
 
 function form_fuel_economy_submit(&$form, &$form_state) {
-    
+    global $data;
     $values = isset($form_state['values']) ? $form_state['values'] : NULL;   
     $cars = ($values) ? get_cars($values['year'], $values['make'], $values['category']) : get_cars();
     
-    dsm($cars);
+    $data = $cars;
+    
+    $form_state['storage'] = $cars;
+    $form_state['rebuild'] = TRUE;
+    
+}
+
+function get_table_markup($data = null) {
+    //dsm($data);
+    if (count($data) > 0) {
+        $markup = '<table>
+        <tr>
+          <th>#</th>
+          <th>Year</th> 
+          <th>Make</th>
+          <th>Model</th>
+          <th>Category</th>     
+          <th>Fuel Type</th>
+          <th>L/100 city</th>
+          <th>L/100 hwy</th>
+          <th>liters/year</th>
+          <th>C02 / year</th>
+        </tr>';
+        $i=1;
+        foreach ($data as $k => $item) {
+
+            $markup .= '<tr>';
+              $markup .= '<td>'. $i++ .'</td>';
+              $markup .= '<td>'. $item->year .'</td> ';
+              $markup .= '<td>'. $item->make .'</td>';
+              $markup .= '<td>'. $item->model .'</td>';
+              $markup .= '<td>'. $item->category .'</td>';
+              $markup .= '<td>'. $item->fuel_type .'</td>';
+              $markup .= '<td>'. $item->liters_city .'</td>';
+              $markup .= '<td>'. $item->liters_hwy .'</td>';
+              $markup .= '<td>'. $item->liters_year .'</td>';
+              $markup .= '<td>'. $item->co2_year .'</td>';
+            $markup .= '</tr>';
+        }
+
+        $markup .= '</table>';
+
+        $markup .= 'Understanding the Table';
+        $markup .= 'Model';
+        $markup .= '<ul>';
+            $markup .= '<li>4WD/4X4 = Four-wheel drive</li>';
+            $markup .= '<li>AWD = All-wheel drive</li>';
+            $markup .= '<li>CNG = Compressed natural gas</li>';
+            $markup .= '<li>FFV = Flexible-fuel vehicle</li>';
+            $markup .= '<li>NGV = Natural gas vehicle</li>';
+            $markup .= '<li># = High output engine that provides more power than the standard engine of the same size</li>';
+        $markup .= '</ul>';
+        $markup .= 'Transmission';
+            $markup .= '<ul>';
+            $markup .= '<li>A = Automatic</li>';
+            $markup .= '<li>AM = Automated manual</li>';
+            $markup .= '<li>AS = Automatic with select shift</li>';
+            $markup .= '<li>AV = Continuously variable</li>';
+            $markup .= '<li>M = Manual</li>';
+            $markup .= '<li>Number of gears (3 – 8)</li>';
+        $markup .= '</ul>';
+        $markup .= 'Fuel Type';
+            $markup .= '<ul>';
+            $markup .= '<li>D = Diesel</li>';
+            $markup .= '<li>E = Ethanol (E85)</li>';
+            $markup .= '<li>N = Natural Gas</li>';
+            $markup .= '<li>X = Regular gasoline</li>';
+            $markup .= '<li>Z = Premium gasoline</li>';
+        $markup .= '</ul>';
+        $markup .= 'Fuel Consumption: Fuel consumption ratings are shown in litres per 100 kilometres (L/100 km) and in miles per imperial gallon (mi./gal.)';
+        $markup .= 'Fuel (L) / Year: Estimated annual fuel use is based on 20 000 km driven and a combined rating of 55 percent city and 45 percent highway.';
+        $markup .= 'CO2 Emissions (kg) / Year: Annual carbon dioxide emissions are based on estimated annual fuel use and fuel type.';
+        $markup .= '';
+    
+    } elseif (is_null($data)) {
+        $markup = '<p>Please make selections above and submit the form</p>';
+    } else {
+        $markup = '<p>No Records Found</p>';
+    }
+    return $markup;
 }
 
 function get_data($arg1) {   
-
-//SELECT * FROM code1.fuel_economy where year = 2014 order by liters_city
-  
-  
   $content = array();
+  $content['form'] = drupal_get_form('form_fuel_economy');
+  
+  global $data;
+
+  
   $content['raw_markup'] = array(
     '#type' => 'markup',
-    '#markup' => 'Truly, this is magical!' . $arg1,
+    '#markup' => get_table_markup($data),
     '#prefix' => '<p>',
     '#sufix' => '</p>',
       '#attached' => array(
@@ -132,8 +212,6 @@ function get_data($arg1) {
       )
     ),
   );
-  
-  $content['form'] = drupal_get_form('form_fuel_economy');
   
   return $content;
 }
