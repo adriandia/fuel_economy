@@ -132,7 +132,7 @@
                                         <a href="<?php print base_path();?>"><img src="<?php print base_path() . drupal_get_path('theme', 'simplecorp') ;?>/images/sampleimages/img1.jpg" alt="" /></a>
                                     </div>
                                     <div class="flex-caption">
-                                        <h3>Quisque eu nibh enim, ac aliquam nunc.</h3>
+                                        <h3>Find out what car brands have the best fuel economy.</h3>
                                     </div>
                                 </li>
     
@@ -142,7 +142,7 @@
                                         <a href="<?php print base_path();?>"><img src="<?php print base_path() . drupal_get_path('theme', 'simplecorp') ;?>/images/sampleimages/img2.jpg" alt="" /></a>
                                     </div>                        
                                     <div class="flex-caption">
-                                        <h3>Quisque eu nibh enim, ac aliquam nunc.</h3>
+                                        <h3>Saving gas is not only good for your wallet its also great for the environment.</h3>
                                     </div>
                                 </li>
     
@@ -152,7 +152,7 @@
                                         <a href="<?php print base_path();?>"><img src="<?php print base_path() . drupal_get_path('theme', 'simplecorp') ;?>/images/sampleimages/img3.jpg" alt="" /></a>
                                     </div>
                                     <div class="flex-caption">
-                                        <h3>Quisque eu nibh enim, ac aliquam nunc.</h3>
+                                        <h3>Less stops at the pump on a long trip.</h3>
                                     </div>
                                 </li>
     
@@ -192,10 +192,10 @@
                         <!--featured-item -->
                         <div class="one-half">
                             <img src="<?php print base_path() . drupal_get_path('theme', 'simplecorp') ;?>/images/sampleimages/featured-img-01.png" class="img-align-left" alt="" />
-                            <h3>Awesome Features</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
+                            <h3>Top Mini Vans</h3>
+                            <p>Minivans are great for a large family but larger cars use more gas.  Find out what minivans are most fuel efficient.</p>
                             <div class="readmore">
-                                <a href="#">Read More</a>
+                                <a href="top-mini-vans">Read More</a>
                             </div>
                         </div>
                         <!--EOF: featured-item -->
@@ -203,10 +203,10 @@
                         <!--featured-item -->
                         <div class="one-half last">
                             <img src="<?php print base_path() . drupal_get_path('theme', 'simplecorp') ;?>/images/sampleimages/featured-img-02.png" class="img-align-left" alt="" />
-                            <h3>Browser Compatibility</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
+                            <h3>Top Pickup Trucks</h3>
+                            <p>If you need a truck to get the job done you know feeding the best is not cheap.  When saving money is important you need a more economical truck.</p>
                             <div class="readmore">
-                                <a href="#">Read More</a>
+                                <a href="top-pickup-trucks">Read More</a>
                             </div>
                         </div>
                         <!--EOF: featured-item -->              
@@ -218,10 +218,10 @@
                         <!--featured-item -->
                         <div class="one-half">
                             <img src="<?php print base_path() . drupal_get_path('theme', 'simplecorp') ;?>/images/sampleimages/featured-img-03.png" class="img-align-left" alt="" />
-                            <h3>Works on Mobile Devices</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
+                            <h3>Top Full Size Cars</h3>
+                            <p>Full size cars have always been a large market segment when it comes to automobiles but which full size cars use the least gas?</p>
                             <div class="readmore">
-                                <a href="#">Read More</a>
+                                <a href="top-full-size-cars">Read More</a>
                             </div>
                         </div>
                         <!--EOF: featured-item -->              
@@ -229,10 +229,10 @@
                         <!--featured-item -->
                         <div class="one-half last">
                             <img src="<?php print base_path() . drupal_get_path('theme', 'simplecorp') ;?>/images/sampleimages/featured-img-04.png" class="img-align-left" alt="" />
-                            <h3>Full Documentation</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
+                            <h3>Top Small SUVs</h3>
+                            <p>Small SUV's are the best of both worlds.  Small enough to be easy to drive and large enough to go shopping with.  Find the most economical Small SUVs</p>
                             <div class="readmore">
-                                <a href="#">Read More</a>
+                                <a href="top-small-suvs">Read More</a>
                             </div>
                         </div>
                         <!--EOF: featured-item -->   
